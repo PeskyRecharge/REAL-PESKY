@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Visitor Counter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: #fff;
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+    .counter-box {
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px auto;
+      width: 300px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .counter-box span {
+      font-size: 2em;
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+      color: #ffd700;
+    }
+    button {
+      margin-top:30px;
+      padding:10px 20px;
+      background:#ffd700;
+      color:#000;
+      border:none;
+      border-radius:5px;
+      cursor:pointer;
+      font-size:16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Visitor Statistics</h1>
+  <div class="counter-box">
+    <p>Total Visitors:</p>
+    <span id="totalVisitors">Loading...</span>
+  </div>
+  <div class="counter-box">
+    <p>Today's Visitors:</p>
+    <span id="dailyVisitors">Loading...</span>
+  </div>
+
+  <button onclick="goBackToAdmin()">GO BACK TO ADMIN PANEL</button>
+
+  <!-- Firebase SDKs (compat v10) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <!-- Visitor Counter Logic -->
+  <script>
+    // ===============================
+    // FIREBASE INIT
+    // ===============================
+    const firebaseConfig = {
+      apiKey: "AIzaSyChAU1MnZxKB0PPdRZLaWvEWxkQyKxqKU",
+      authDomain: "real-pesky.firebaseapp.com",
+      projectId: "real-pesky",
+      storageBucket: "real-pesky.firebasestorage.app",
+      messagingSenderId: "629793050464",
+      appId: "1:629793050464:web:30fe462acfe0e71c605805",
+      measurementId: "G-RRM9QSCHV2"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // ===============================
+    // VISITOR TRACKING
+    // ===============================
+    function getTodayDate() {
+      return new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+    }
+
+    // TOTAL VISITORS
+    const statsRef = db.collection("analytics").doc("stats");
+    statsRef.set(
+      { totalVisitors: firebase.firestore.FieldValue.increment(1) },
+      { merge: true }
+    ).then(() => console.log("Total visitors incremented"));
+
+    // DAILY VISITORS
+    const today = getTodayDate();
+    const dailyRef = db.collection("dailyVisitors").doc(today);
+    dailyRef.set(
+      { visitors: firebase.firestore.FieldValue.increment(1) },
+      { merge: true }
+    ).then(() => console.log("Daily visitors incremented"));
+
+    // ===============================
+    // DISPLAY COUNTS
+    // ===============================
+    statsRef.onSnapshot(doc => {
+      if (doc.exists) {
+        document.getElementById("totalVisitors").innerText = doc.data().totalVisitors;
+        console.log("Total Visitors:", doc.data().totalVisitors);
+      }
+    });
+
+    dailyRef.onSnapshot(doc => {
+      if (doc.exists) {
+        document.getElementById("dailyVisitors").innerText = doc.data().visitors;
+        console.log("Daily Visitors:", doc.data().visitors);
+      }
+    });
+
+    // ===============================
+    // GO BACK BUTTON
+    // ===============================
+    function goBackToAdmin() {
+      window.location.href = "admin.html"; // change to your actual admin panel file or URL
+    }
+  </script>
+</body>
+</html>
