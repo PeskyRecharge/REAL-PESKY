@@ -1,0 +1,80 @@
+/* Global page styling */
+body {
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: white;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Container */
+.container {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+/* Headings */
+h1 {
+  text-align: center;
+  color: gold;
+  margin-bottom: 20px;
+}
+h2 {
+  color: gold;
+  margin-bottom: 15px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* Paragraphs */
+p {
+  margin-bottom: 18px;
+  font-size: 16px;
+}
+
+/* Lists */
+ul {
+  margin: 20px 0;
+  padding-left: 25px;
+}
+li {
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+/* Section blocks */
+.block {
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 10px;
+}
+
+/* Background tones for each section */
+.mission { background: #1e293b; }
+.vision { background: #334155; }
+.values { background: #475569; }
+.contact { background: #64748b; }
+
+/* Links */
+a {
+  color: gold;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+a:hover {
+  color: white;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 14px;
+  color: gold;
+  border-top: 1px solid gold;
+  padding-top: 15px;
+}
+

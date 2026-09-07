@@ -1,0 +1,12 @@
+# robots.txt for realpesky.site
+# Last updated: 2026-07-24
+# Purpose: Control crawler access while allowing SEO-friendly indexing
+
+User-agent: *
+Disallow: /admin2.html
+
+# Allow everything else
+Allow: /
+
+# Sitemap reference (important for SEO)
+Sitemap: https://realpesky.site/sitemap.xml

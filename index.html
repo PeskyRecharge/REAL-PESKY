@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>REAL PESKY</title>
+
+    <!--  SEO meta tags -->
+    <meta
+      name="description"
+      content="Latest football news, transfer updates, match reports, predictions, and trending highlights from Real Pesky."
+    />
+    <meta
+      name="keywords"
+      content="football news, transfer news, match reports, match predictions, trending football, Real Pesky"
+    />
+    <meta name="author" content="Real Pesky" />
+
+    <!--  Performance optimizations -->
+    <link rel="preload" href="css/style.css" as="style" />
+    <link rel="preload" href="javascript/index.js" as="script" />
+    <link rel="manifest" href="manifest.json">
+    <link rel="canonical" href="https://realpesky.site/" />
+
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Iceberg&family=New+Rocker&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="icon" type="image/png" href="img/pesky3.png" />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!--  Async ads script -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4751724265533576"
+      crossorigin="anonymous"
+    ></script>
+
+    <!--  Firebase scripts (must load immediately for posts to work) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyChAU1MnZxKB0PPdRZLaWvEWXkqYDl-qKU",
+        authDomain: "real-pesky.firebaseapp.com",
+        projectId: "real-pesky",
+        storageBucket: "real-pesky.firebasestorage.app",
+        messagingSenderId: "629793050464",
+        appId: "1:629793050464:web:30fe462acfe0e71c605805",
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+      const storage = firebase.storage();
+
+      function filterCategory(category) {
+        categoryFilter = category.toLowerCase();
+        loadPosts();
+      }
+    </script>
+  </head>
+  <body>
+    <header>
+      <div class="title">
+        <!--   logo -->
+        <img src="img/pesky2.png" alt="Logo" class="logo" loading="lazy" />
+        <h1>REAL PESKY.SITE</h1>
+        <img src="img/pesky3.png" alt="Logo" class="logo logo-right" loading="lazy" />
+      </div>
+    </header>
+
+    <h2 class="main-header">
+      <span>Latest Football News, Updates &</span>
+      <span>Highlights</span>
+    </h2>
+
+    <nav class="navbar">
+      <a href="#" onclick="filterCategory('')">HOME</a>
+      <a href="#" onclick="filterCategory('Football News')">Football News</a>
+      <a href="#" onclick="filterCategory('Transfer News')">Transfer News</a>
+      <a href="#" onclick="filterCategory('Match Reports')">Match Reports</a>
+      <a href="#" onclick="filterCategory('Match Prediction')"
+        >Match Prediction</a
+      >
+      <a href="#" onclick="filterCategory('Trending News')">Trending News</a>
+    </nav>
+
+    <div class="search-box">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search football news..."
+      />
+      <button onclick="searchPosts()">Search</button>
+    </div>
+<!-- Posts container -->
+<div id="posts"></div>
+
+<!-- See More button -->
+<button id="seeMoreBtn" onclick="seeMore()">See More</button>
+
+    <footer class="social-footer">
+      <h3>FOLLOW REAL PESKY</h3>
+      <p>Football Analysis & Comedy Content</p>
+
+      <div class="social-links">
+        <a href="https://www.facebook.com/realpesky1" target="_blank"
+          >Facebook</a
+        >
+        <a href="https://www.youtube.com/@REALPESKY" target="_blank">YouTube</a>
+        <a href="https://www.instagram.com/realpesky1" target="_blank"
+          >Instagram</a
+        >
+        <a href="https://www.tiktok.com/@realpesky" target="_blank">TikTok</a>
+        <a href="https://x.com/realpesky" target="_blank">X (Twitter)</a>
+      </div>
+
+      <nav class="policy-links" aria-label="Footer navigation">
+        <a href="disclaimer.html">Disclaimer</a>
+        <a href="terms.html">Terms &amp; Conditions</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="cookie.html">Cookie Policy</a>
+        <a href="copyright.html">Copyright Policy</a>
+        <a href="editorial.html">Editorial Policy</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact Us</a>
+      </nav>
+
+      <p class="copy">© 2026 REAL PESKY</p>
+    </footer>
+
+    <!--  Defer main JS linking (safe, Firebase already loaded above) -->
+    <script src="javascript/index.js" defer></script>
+
+    <!--  Structured data for SEO -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Real Pesky",
+        "url": "https://realpesky.site",
+        "logo": "https://realpesky.site/img/pesky2.png",
+        "sameAs": [
+          "https://www.facebook.com/realpesky1",
+          "https://www.youtube.com/@REALPESKY",
+          "https://www.instagram.com/realpesky1",
+          "https://www.tiktok.com/@realpesky",
+          "https://x.com/realpesky"
+        ]
+      }
+    </script>
+
+    <script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js")
+      .then(() => console.log("Service Worker registered"));
+  }
+</script>
+
+  </body>
+</html>

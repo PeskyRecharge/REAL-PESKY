@@ -1,0 +1,60 @@
+/* Global page styling */
+body {
+  font-family: Arial, sans-serif;
+  background: #0f172a; /* deep navy background */
+  color: #f1f5f9;      /* light text for readability */
+  margin: 0;
+  padding: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Container */
+.container {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+/* Main heading */
+h1 {
+  text-align: center;
+  color: #ffd700; /* gold accent */
+}
+
+/* Section block */
+.block {
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 10px;
+}
+
+/* Contact block */
+.contact {
+  background: #f8fafc; /* clean light background */
+  color: #0f172a;      /* dark text for contrast */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Links */
+a {
+  color: #1e40af; /* professional deep blue */
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+a:hover {
+  color: #ffd700; /* gold hover */
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 14px;
+  color: #ffd700;
+  border-top: 1px solid #ffd700;
+  padding-top: 15px;
+}

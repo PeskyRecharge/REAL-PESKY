@@ -1,0 +1,41 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: gold;
+}
+
+.block {
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 10px;
+}
+
+.general { background: #1e293b; }
+.external { background: #334155; }
+.liability { background: #475569; }
+.advice { background: #64748b; }
+.contact { background: #94a3b8; color: black; }
+
+.footer {
+  text-align: center;
+  margin-top: 20px;
+  color: gold;
+  font-weight: bold;
+}

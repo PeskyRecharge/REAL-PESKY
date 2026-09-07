@@ -1,0 +1,609 @@
+﻿body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #0f172a, #1e293b);
+  color: white;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+#posts {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 12px 32px;
+}
+
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 260px;
+  width: 100%;
+  text-align: center;
+  color: #e2e8f0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+HEADER .title {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  min-height: 0;
+  width: 100%;
+  padding: 10px 15px 4px;
+}
+
+.logo {
+  grid-column: 1;
+  justify-self: end;
+  margin-right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.logo-right {
+  grid-column: 3;
+  justify-self: start;
+  margin-right: 0;
+  margin-left: 20px;
+}
+
+h1 {
+  grid-column: 2;
+  margin: 0;
+}
+
+.main-header {
+  width: min(100% - 24px, 760px);
+  color: gold;
+  border: 2px solid gold;
+  border-radius: 8px;
+  background: rgba(255, 215, 0, 0.1);
+  padding: 7px 12px;
+  margin: 0 auto;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.main-header span {
+  display: block;
+}
+
+.main-header span:first-child {
+  text-align: left;
+}
+
+.main-header span:last-child {
+  text-align: center;
+}
+
+h1 {
+  margin: 0;
+  font-size: 2.2em;
+  max-width: 100%;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+h1 {
+  font-family: "Iceberg", cursive;
+}
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 12px;
+  background: #1e293b;
+  border-bottom: 2px solid gold;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+@media (max-width: 640px) {
+  .main-header {
+    width: calc(100% - 24px);
+    margin: 0 12px;
+    padding: 7px 10px;
+    font-size: 1.2rem;
+  }
+
+  h1 {
+    font-size: 1.7rem;
+  }
+
+  .logo {
+    width: 32px;
+    height: 32px;
+  }
+
+  .navbar {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .navbar a {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+
+  .search-box input {
+    width: 78%;
+  }
+
+  .post {
+    margin: 12px auto;
+    padding: 16px;
+    border-radius: 10px;
+  }
+
+  .post h3 {
+    font-size: 18px;
+  }
+
+  .post p {
+    font-size: 15px;
+  }
+
+  .loading-state {
+    min-height: 220px;
+    font-size: 1rem;
+  }
+}
+
+.navbar a:hover,
+.navbar a:focus,
+.navbar a:active {
+  color: gold;
+}
+
+.search-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  text-align: center;
+  margin: 10px 12px 14px;
+}
+
+.search-box input {
+  padding: 8px;
+  width: min(60%, 520px);
+  min-width: 0;
+  border: none;
+  border-radius: 8px;
+}
+
+.search-box button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background: gold;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.post {
+  background: #1e293b;
+  width: 100%;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.post img {
+  width: 100%;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+
+.post-title {
+  color: #ffffff;
+}
+
+.post-actions {
+  margin-top: 15px;
+}
+
+.post-actions button {
+  padding: 8px 12px;
+  margin-right: 8px;
+  background: transparent;
+  border: 1px solid #94a3b8;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.post-actions button:hover {
+  background: transparent;
+}
+
+/* FOOTER */
+.social-footer {
+  text-align: center;
+  margin-top: 40px;
+  padding: 30px;
+  background: #1e293b;
+  border-top: 2px solid gold;
+}
+
+.social-footer h3 {
+  color: gold;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin: 15px 0;
+}
+
+.social-links a {
+  color: white;
+  text-decoration: none;
+  border: 1px solid gold;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.social-links a:hover {
+  background: gold;
+  color: black;
+}
+
+.copy {
+  margin-top: 15px;
+}
+
+.post p {
+  line-height: 1.7;
+  font-size: 16px;
+  color: #e2e8f0;
+  margin-top: 12px;
+}
+
+.post p {
+  white-space: pre-line;
+  line-height: 1.6;
+  text-align: left;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  margin-top: 10px;
+}
+
+.post h3 {
+  text-align: left;
+  font-size: 20px;
+  margin-bottom: 10px;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.post p {
+  text-align: left;
+  line-height: 1.6;
+  font-size: 16px;
+  word-wrap: break-word;
+  white-space: pre-line;
+}
+
+.post {
+  text-align: left;
+}
+
+.post small {
+  display: block;
+  margin-top: 10px;
+  color: #cbd5e1;
+}
+
+/* General navbar link styling */
+.navbar a {
+  border-radius: 6px;
+  padding: 5px 10px;
+  text-decoration: none;
+  margin: 0 5px;
+  display: inline-block;
+  font-weight: bold;
+  transition: 0.3s ease;
+}
+
+/* First link = HOME */
+.navbar a:nth-child(1) {
+  border: 2px solid #2563eb; /* sky blue */
+  color: #ffffff;
+}
+
+/* Second link = Football News */
+.navbar a:nth-child(2) {
+  border: 2px solid #2563eb; /* yellow */
+  color: #ffffff;
+  background: rgba(250, 204, 21, 0.1); /* subtle yellow highlight */
+}
+
+/* Third link = Transfer News */
+.navbar a:nth-child(3) {
+  border: 2px solid #2563eb; /* orange */
+  color: #ffffff;
+  background: rgba(249, 115, 22, 0.1);
+}
+
+/* Fourth link = Match Reports */
+.navbar a:nth-child(4) {
+  border: 2px solid #2563eb; /* purple */
+  color: #ffffff;
+  background: rgba(168, 85, 247, 0.1);
+}
+
+/* Fifth link = Match Prediction */
+.navbar a:nth-child(5) {
+  border: 2px solid #2563eb; /* green */
+  color: #ffffff;
+  background: rgba(34, 197, 94, 0.1);
+}
+
+/* Sixth link = Trending News */
+.navbar a:nth-child(6) {
+  border: 2px solid #2563eb; /* red */
+  color: #ffffff;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Hover effect for all links */
+.navbar a:hover {
+  background: gold;
+  color: black;
+  border-color: white;
+}
+
+footer .policy-links {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  width: min(100%, 760px);
+  margin: 24px auto 0;
+}
+
+footer .policy-links a {
+  display: block;
+  padding: 10px 8px;
+  color: #e2e8f0;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid #475569;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+footer .policy-links a:hover,
+footer .policy-links a:focus-visible {
+  background: gold;
+  border-color: gold;
+  color: #0f172a;
+}
+
+  outline: none;
+}
+
+/* Apply slow shake animation to all nav links */
+.navbar a {
+  display: inline-block;
+  animation: slowShake 6s infinite ease-in-out;
+}
+
+/* Stagger each link with delays so they shake one after the other */
+.navbar a:nth-child(1) {
+  animation-delay: 0s;
+}
+.navbar a:nth-child(2) {
+  animation-delay: 1s;
+}
+.navbar a:nth-child(3) {
+  animation-delay: 2s;
+}
+.navbar a:nth-child(4) {
+  animation-delay: 3s;
+}
+.navbar a:nth-child(5) {
+  animation-delay: 4s;
+}
+.navbar a:nth-child(6) {
+  animation-delay: 5s;
+}
+
+/* Define a subtle shake motion */
+@keyframes slowShake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-3px);
+  }
+  40% {
+    transform: translateX(3px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Apply slow shake animation to all social links */
+.social-links a {
+  display: inline-block;
+  animation: slowShake 6s infinite ease-in-out;
+}
+
+/* Stagger each link with delays so they shake one after the other */
+.social-links a:nth-child(1) {
+  animation-delay: 0s;
+}
+.social-links a:nth-child(2) {
+  animation-delay: 1s;
+}
+.social-links a:nth-child(3) {
+  animation-delay: 2s;
+}
+.social-links a:nth-child(4) {
+  animation-delay: 3s;
+}
+.social-links a:nth-child(5) {
+  animation-delay: 4s;
+}
+
+/* Define a subtle shake motion */
+@keyframes slowShake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-3px);
+  }
+  40% {
+    transform: translateX(3px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Blink animation for footer heading */
+.social-footer h3 {
+  animation: blinkText 2s infinite; /* slow blink, repeats forever */
+}
+
+/* Define the blink effect */
+@keyframes blinkText {
+  0%,
+  100% {
+    opacity: 1;
+  } /* fully visible */
+  50% {
+    opacity: 0;
+  } /* invisible */
+}
+
+/* Rotate the logo infinitely */
+.logo {
+  display: inline-block;
+  animation: rotateLogo 10s linear infinite;
+}
+
+/* Define the rotation keyframes */
+@keyframes rotateLogo {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.copy {
+  display: inline-block;
+  font-weight: bold;
+  font-size: 1.1em;
+  color: #ffcc00; /* professional gold tone */
+}
+
+/* Keyframes for sliding left → center → right */
+@keyframes slideLoop {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  } /* start off left */
+  30% {
+    transform: translateX(0);
+    opacity: 1;
+  } /* arrive center */
+  50% {
+    transform: translateX(0);
+    opacity: 1;
+  } /* pause at center */
+  80% {
+    transform: translateX(100%);
+    opacity: 0;
+  } /* exit to right */
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  } /* stay off right */
+}
+
+
+
+
+#seeMoreBtn {
+  display: none;
+  margin: 20px auto;
+  padding: 12px 24px;
+  background: #007BFF; /* blue */
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  animation: shake 2s infinite;
+}
+#seeMoreBtn:hover {
+  background: #0056b3;
+}
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-3px); }
+  40% { transform: translateX(3px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+  100% { transform: translateX(0); }
+}
+.closeBtn {
+  display: block;
+  margin: 10px auto;
+  padding: 8px 16px;
+  background: #444;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.closeBtn:hover {
+  background: #222;
+}
