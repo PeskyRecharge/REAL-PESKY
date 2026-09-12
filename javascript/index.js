@@ -136,13 +136,7 @@ function savePostsToCache(docs) {
 
 function renderCachedPosts() {
   const cachedPosts = getCachedPosts();
-  if (!cachedPosts.length) {
-    const postsContainer = document.getElementById("posts");
-    if (postsContainer) {
-      postsContainer.innerHTML = '<div class="loading-state">Loading latest posts...</div>';
-    }
-    return false;
-  }
+  if (!cachedPosts.length) return false;
 
   renderFeed(cachedPosts);
   return true;
