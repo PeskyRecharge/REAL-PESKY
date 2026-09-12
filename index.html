@@ -99,13 +99,23 @@
         id="searchInput"
         placeholder="Search football news..."
       />
-      <button onclick="searchPosts()">Search</button>
+      <button id="searchBtn" type="button" onclick="searchPosts()">
+        <span class="search-label">Search</span>
+        <span class="button-spinner" aria-hidden="true"></span>
+      </button>
     </div>
 <!-- Posts container -->
-<div id="posts"></div>
+<div id="posts">
+  <div id="pageLoader" class="page-loader" role="status" aria-label="Loading posts">
+    <span class="page-spinner" aria-hidden="true"></span>
+  </div>
+</div>
 
 <!-- See More button -->
-<button id="seeMoreBtn" onclick="seeMore()">See More</button>
+<button id="seeMoreBtn" type="button" onclick="seeMore()">
+  <span class="see-more-label">See More</span>
+  <span class="see-more-spinner" aria-hidden="true"></span>
+</button>
 
     <footer class="social-footer">
       <h3>FOLLOW REAL PESKY</h3>

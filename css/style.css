@@ -19,6 +19,30 @@
   padding: 0 12px 32px;
 }
 
+.page-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 260px;
+  width: 100%;
+}
+
+.page-spinner {
+  width: 76px;
+  height: 76px;
+  border: 8px solid rgba(255, 215, 0, 0.25);
+  border-top-color: gold;
+  border-right-color: #ffffff;
+  border-radius: 50%;
+  animation: pageSpin 0.75s linear infinite;
+}
+
+@keyframes pageSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .loading-state {
   display: flex;
   align-items: center;
@@ -117,6 +141,10 @@ h1 {
 }
 
 @media (max-width: 640px) {
+  #posts {
+    padding: 0 0 24px;
+  }
+
   .main-header {
     width: calc(100% - 24px);
     margin: 0 12px;
@@ -149,9 +177,10 @@ h1 {
   }
 
   .post {
-    margin: 12px auto;
-    padding: 16px;
-    border-radius: 10px;
+    width: 100%;
+    margin: 0 0 12px;
+    padding: 12px;
+    border-radius: 0;
   }
 
   .post h3 {
@@ -193,12 +222,69 @@ h1 {
 }
 
 .search-box button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   padding: 8px 12px;
   border: none;
   border-radius: 8px;
   background: gold;
   cursor: pointer;
   font-weight: bold;
+}
+
+.button-spinner {
+  display: none;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(15, 23, 42, 0.3);
+  border-top-color: #0f172a;
+  border-radius: 50%;
+}
+
+.search-box button.is-loading .button-spinner {
+  display: inline-block;
+  animation: buttonSpin 0.7s linear infinite;
+}
+
+#seeMoreBtn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 auto 28px;
+  padding: 9px 16px;
+  border: none;
+  border-radius: 8px;
+  background: gold;
+  color: #0f172a;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#seeMoreBtn.is-loading {
+  cursor: wait;
+}
+
+.see-more-spinner {
+  display: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(15, 23, 42, 0.3);
+  border-top-color: #0f172a;
+  border-radius: 50%;
+}
+
+#seeMoreBtn.is-loading .see-more-spinner {
+  display: inline-block;
+  animation: buttonSpin 0.7s linear infinite;
+}
+
+@keyframes buttonSpin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .post {
@@ -409,9 +495,6 @@ footer .policy-links a:focus-visible {
   color: #0f172a;
 }
 
-  outline: none;
-}
-
 /* Apply slow shake animation to all nav links */
 .navbar a {
   display: inline-block;
@@ -606,4 +689,13 @@ footer .policy-links a:focus-visible {
 }
 .closeBtn:hover {
   background: #222;
+}
+
+@media (max-width: 640px) {
+  #posts .post {
+    width: 100%;
+    margin: 0 0 12px;
+    padding: 12px;
+    border-radius: 0;
+  }
 }

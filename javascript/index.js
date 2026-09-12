@@ -102,7 +102,7 @@ function getCachedPosts() {
 
 function savePostsToCache(docs) {
   try {
-    const posts = docs.map((doc) => {
+    const freshPosts = docs.map((doc) => {
       const data = doc.data();
       const safeData = { ...data };
 
@@ -115,12 +115,18 @@ function savePostsToCache(docs) {
         data: safeData,
       };
     });
+    const cachedPosts = getCachedPosts().map((item) => ({
+      id: item.id,
+      data: item.data(),
+    }));
+    const postsById = new Map(cachedPosts.map((post) => [post.id, post]));
+    freshPosts.forEach((post) => postsById.set(post.id, post));
 
     localStorage.setItem(
       POSTS_CACHE_KEY,
       JSON.stringify({
         savedAt: Date.now(),
-        posts,
+        posts: [...postsById.values()],
       })
     );
   } catch (error) {
@@ -184,11 +190,40 @@ function loadRelatedPosts(excludePostId) {
     .catch(() => '<p class="empty-state">No more posts available right now.</p>');
 }
 
+function renderPostDetail(postId, post, relatedPostsHtml = '<p class="loading-state">Loading more stories...</p>') {
+  const postDate = formatPostDate(post.time);
+  const author = escapeHtml(post.author || "realpesky");
+  const title = escapeHtml(post.title || "");
+  const description = escapeHtml(post.description || "").replace(/\n/g, "<br>");
+  const category = escapeHtml(post.category || "");
+
+  document.title = `${post.title || "Article"} | REAL PESKY`;
+  document.getElementById("posts").innerHTML = `
+    <article class="post detail-post" id="post-${postId}" data-post-id="${postId}">
+      <small>${category}</small>
+      <h2>${title}</h2>
+      ${post.image ? `<img src="${post.image}" alt="${title}" loading="eager" />` : ""}
+      <p class="post-desc">${description}</p>
+      <p class="post-meta">Posted by ${author} on ${postDate}</p>
+      <div class="post-actions">
+        <button type="button" onclick="closePostDetail()">Back to Latest Posts</button>
+      </div>
+    </article>
+
+    <section class="related-posts">
+      <h3>More stories</h3>
+      ${relatedPostsHtml}
+    </section>
+  `;
+}
+
 function showPostDetail(postId) {
   isDetailView = true;
-  const postsContainer = document.getElementById("posts");
-  if (postsContainer) {
-    postsContainer.innerHTML = '<div class="loading-state">Loading article...</div>';
+  const cachedPost = getCachedPosts().find((entry) => entry.id === postId);
+  if (cachedPost) {
+    renderPostDetail(postId, cachedPost.data());
+  } else {
+    document.getElementById("posts").innerHTML = '<div class="loading-state">Loading article...</div>';
   }
 
   db.collection("posts")
@@ -196,55 +231,27 @@ function showPostDetail(postId) {
     .get()
     .then((doc) => {
       if (!doc.exists) {
-        loadPosts();
+        if (!cachedPost) loadPosts();
         return;
       }
 
       const post = doc.data();
-      const postDate = post.time ? post.time.toDate().toLocaleString() : "";
-      const author = post.author || "realpesky";
-      const title = escapeHtml(post.title || "");
-      const description = escapeHtml(post.description || "").replace(/\n/g, "<br>");
-      const category = escapeHtml(post.category || "");
-
-      document.title = `${post.title || "Article"} | REAL PESKY`;
-      const metaDescription = document.querySelector('meta[name="description"]');
-      if (metaDescription) {
-        metaDescription.setAttribute(
-          "content",
-          post.description ? post.description.substring(0, 160) : "Football news, transfer updates and match analysis from Real Pesky."
-        );
-      }
-
+      savePostsToCache([doc]);
+      renderPostDetail(postId, post);
       loadRelatedPosts(postId).then((relatedPostsHtml) => {
-        document.getElementById("posts").innerHTML = `
-          <article class="post detail-post" id="post-${postId}" data-post-id="${postId}">
-            <small>${category}</small>
-            <h2>${title}</h2>
-            ${post.image ? `<img src="${post.image}" alt="${title}" loading="eager" />` : ""}
-            <p class="post-desc">${description}</p>
-            <p class="post-meta">Posted by ${author} on ${postDate}</p>
-            <div class="post-actions">
-              <button type="button" onclick="closePostDetail()">Back to Latest Posts</button>
-            </div>
-          </article>
-
-          <section class="related-posts">
-            <h3>More stories</h3>
-            ${relatedPostsHtml}
-          </section>
-        `;
+        if (isDetailView) renderPostDetail(postId, post, relatedPostsHtml);
       });
     })
     .catch(() => {
-      loadPosts();
+      if (!cachedPost) loadPosts();
     });
 }
 
 function renderFeed(posts) {
   let postsHTML = "";
+  const visiblePosts = searchValue.trim() ? posts : posts.slice(0, 10);
 
-  posts.forEach((entry) => {
+  visiblePosts.forEach((entry) => {
     const post = typeof entry.data === "function" ? entry.data() : entry;
     const postId = entry.id || entry.postId || entry.docId;
     const title = (post.title || "").toLowerCase();
@@ -260,73 +267,159 @@ function renderFeed(posts) {
   });
 
   document.getElementById("posts").innerHTML = postsHTML || '<p class="empty-state">No posts found.</p>';
-  document.getElementById("seeMoreBtn").style.display = "none";
+  document.getElementById("pageLoader")?.remove();
+  document.getElementById("seeMoreBtn").style.display =
+    !searchValue.trim() && visiblePosts.length >= 10 ? "block" : "none";
+}
+
+function appendFeedPosts(posts, maxPosts = Number.POSITIVE_INFINITY) {
+  const postsContainer = document.getElementById("posts");
+  const existingIds = new Set(
+    [...postsContainer.querySelectorAll(".post[data-post-id]")].map(
+      (post) => post.dataset.postId
+    )
+  );
+  const newHtml = posts
+    .filter((entry) => !existingIds.has(entry.id))
+    .slice(0, maxPosts)
+    .map((entry) => {
+      const post = typeof entry.data === "function" ? entry.data() : entry;
+      const title = (post.title || "").toLowerCase();
+      const desc = (post.description || "").toLowerCase();
+      const matchText = searchValue.trim().toLowerCase();
+      const matchesSearch =
+        matchText === "" || title.includes(matchText) || desc.includes(matchText);
+      const matchesCategory =
+        !categoryFilter || (post.category || "").trim() === categoryFilter.trim();
+
+      return matchesSearch && matchesCategory ? buildPostCard(post, entry.id) : "";
+    })
+    .join("");
+
+  if (newHtml) {
+    postsContainer.insertAdjacentHTML("beforeend", newHtml);
+    document.getElementById("pageLoader")?.remove();
+  }
 }
 
 function loadPosts(isLoadMore = false) {
+  const isSearching = searchValue.trim() !== "";
   let query = db.collection("posts").orderBy("time", "desc");
 
   if (categoryFilter && categoryFilter.trim() !== "") {
     query = query.where("category", "==", categoryFilter.trim());
   }
 
-  if (isLoadMore && lastVisible) {
+  if (isLoadMore && lastVisible && !isSearching) {
     query = query.startAfter(lastVisible);
   }
 
-  query = query.limit(10);
+  if (!isSearching) {
+    query = query.limit(10);
+  }
 
-  query
-    .get()
+  return query
+    .get({ source: "cache" })
+    .then((cachedSnapshot) => {
+      if (!cachedSnapshot.empty && !isLoadMore) {
+        renderFeed(cachedSnapshot.docs);
+        if (!isSearching && cachedSnapshot.size === 10) {
+          document.getElementById("seeMoreBtn").style.display = "block";
+        }
+      } else if (!cachedSnapshot.empty && isLoadMore) {
+        appendFeedPosts(cachedSnapshot.docs);
+      }
+
+      return query.get();
+    })
+    .catch(() => query.get())
     .then((snapshot) => {
       if (!snapshot.empty) {
         lastVisible = snapshot.docs[snapshot.docs.length - 1];
         savePostsToCache(snapshot.docs);
       }
 
-      if (!isLoadMore) {
+      if (!isLoadMore && !snapshot.empty) {
         renderFeed(snapshot.docs);
       } else {
-        const currentPosts = document.getElementById("posts");
-        const currentHtml = currentPosts.innerHTML;
-        const moreHtml = snapshot.docs
-          .map((doc) => {
-            const post = doc.data();
-            const title = (post.title || "").toLowerCase();
-            const desc = (post.description || "").toLowerCase();
-            const matchText = searchValue.trim().toLowerCase();
-            const matchesSearch =
-              matchText === "" || title.includes(matchText) || desc.includes(matchText);
-
-            return matchesSearch ? buildPostCard(post, doc.id) : "";
-          })
-          .join("");
-
-        currentPosts.innerHTML = currentHtml + moreHtml;
+        appendFeedPosts(snapshot.docs);
       }
 
-      if (snapshot.size === 10) {
+      if (!isSearching && snapshot.size === 10) {
         document.getElementById("seeMoreBtn").style.display = "block";
       } else {
         document.getElementById("seeMoreBtn").style.display = "none";
       }
     })
     .catch(() => {
-      document.getElementById("posts").innerHTML = '<p class="empty-state">Unable to load posts right now.</p>';
+      document.getElementById("pageLoader")?.remove();
+      if (!document.querySelector("#posts .post")) {
+        document.getElementById("posts").innerHTML = '<p class="empty-state">Unable to load posts right now.</p>';
+      }
     });
 }
 
 function seeMore() {
-  loadPosts(true);
+  const seeMoreButton = document.getElementById("seeMoreBtn");
+  seeMoreButton.classList.add("is-loading");
+  seeMoreButton.disabled = true;
+
+  const cachedPosts = getCachedPosts();
+  if (cachedPosts.length) {
+    const visibleIds = new Set(
+      [...document.querySelectorAll("#posts .post[data-post-id]")].map(
+        (post) => post.dataset.postId
+      )
+    );
+    appendFeedPosts(
+      cachedPosts.filter((entry) => {
+        const post = entry.data();
+        return (
+          !visibleIds.has(entry.id) &&
+          (!categoryFilter || (post.category || "").trim() === categoryFilter.trim())
+        );
+      }),
+      10
+    );
+  }
+
+  loadPosts(true).finally(() => {
+    seeMoreButton.classList.remove("is-loading");
+    seeMoreButton.disabled = false;
+  });
 }
 
 function searchPosts() {
   searchValue = document.getElementById("searchInput").value.trim();
-  loadPosts();
+  lastVisible = null;
+  const cachedPosts = getCachedPosts();
+  if (cachedPosts.length) {
+    renderFeed(cachedPosts);
+  }
+  document.getElementById("seeMoreBtn").style.display = "none";
+
+  const searchButton = document.getElementById("searchBtn");
+  searchButton.classList.add("is-loading");
+  searchButton.disabled = true;
+
+  loadPosts().finally(() => {
+    searchButton.classList.remove("is-loading");
+    searchButton.disabled = false;
+  });
 }
 
 function filterCategory(category) {
   categoryFilter = category;
+  const cachedPosts = getCachedPosts();
+  const matchingPosts = cachedPosts.filter((entry) => {
+    const post = entry.data();
+    return !categoryFilter || (post.category || "").trim() === categoryFilter.trim();
+  });
+
+  if (matchingPosts.length) {
+    renderFeed(matchingPosts.slice(0, 10));
+  }
+
   loadPosts();
 }
 
